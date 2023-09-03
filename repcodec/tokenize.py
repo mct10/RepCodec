@@ -53,7 +53,7 @@ def parse_args():
 
 
 def load_model(name: str, model_dir: str):
-    config = os.path.join(os.path.dirname(__file__), "../configs", f"repcodec_dim{ALL_MODELS[name]}.yaml")
+    config = os.path.join("./configs", f"repcodec_dim{ALL_MODELS[name]}.yaml")
     with open(config) as fp:
         conf = yaml.load(fp, Loader=yaml.FullLoader)
     model = RepCodec(**conf)
