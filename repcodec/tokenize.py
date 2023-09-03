@@ -5,7 +5,7 @@ import numpy as np
 import torch
 import yaml
 
-from RepCodec import RepCodec
+from repcodec.RepCodec import RepCodec
 
 ALL_MODELS = {
     "data2vec_base_l6": 768,
