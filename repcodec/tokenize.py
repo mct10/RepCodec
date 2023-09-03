@@ -74,7 +74,7 @@ def cli():
 
     device = "cuda" if args.use_gpu else "cpu"
     model.to(device)
-    data.to(device)
+    data = data.to(device)
     with torch.no_grad():
         x = model.encoder(data)
         z = model.projector(x)
