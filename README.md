@@ -49,6 +49,8 @@ repcodec /path/to/representaiton \
 
 and the output tokens will be saved to `out_dir`.
 
+Note that the provided representation file should be a `npy` file and has the shape of `(sequence length, hidden dim)`.
+
 ### Python usage
 
 ```python
