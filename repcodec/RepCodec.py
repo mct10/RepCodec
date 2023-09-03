@@ -1,9 +1,9 @@
 import torch.nn as nn
 
-from model.modules.decoder import Decoder
-from model.modules.encoder import Encoder
-from model.modules.projector import Projector
-from model.modules.quantizer import Quantizer
+from repcodec.modules.decoder import Decoder
+from repcodec.modules.encoder import Encoder
+from repcodec.modules.projector import Projector
+from repcodec.modules.quantizer import Quantizer
 
 
 class RepCodec(nn.Module):

@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-from model.layers.conv_layer import Conv1d, Conv1d1x1
+from repcodec.layers.conv_layer import Conv1d, Conv1d1x1
 
 
 class ResidualUnit(nn.Module):

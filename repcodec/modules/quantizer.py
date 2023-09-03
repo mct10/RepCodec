@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-from model.layers.vq_module import ResidualVQ
+from repcodec.layers.vq_module import ResidualVQ
 
 
 class Quantizer(nn.Module):

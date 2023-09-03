@@ -26,12 +26,15 @@ Also, RepCodec generalizes well across various speech encoders and languages.
 | Whisper large-v2 layer 32 | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1k_X7ZMPg8iOeDrIJe70v6CHfFygzufXC/view?usp=sharing) |
 
 ## Speech Tokenization Using Pre-Trained Models
+### Command Line Usage
+
+### Python usage
 
 ```python
 import torch
 import yaml
 
-from model.RepCodec import RepCodec
+from repcodec.RepCodec import RepCodec
 
 # for feature types of HubERT base & data2vec base, please use repcodec_dim768.yaml;
 # for feature types of HuBERT large & data2vec large & Whisper medium, please use repcodec_dim1024.yaml;

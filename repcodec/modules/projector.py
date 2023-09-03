@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-from model.layers.conv_layer import Conv1d
+from repcodec.layers.conv_layer import Conv1d
 
 
 class Projector(nn.Module):

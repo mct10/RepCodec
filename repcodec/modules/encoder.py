@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 
-from model.layers.conv_layer import Conv1d
-from model.modules.residual_unit import ResidualUnit
+from repcodec.layers.conv_layer import Conv1d
+from repcodec.modules.residual_unit import ResidualUnit
 
 
 class EncoderBlock(nn.Module):
