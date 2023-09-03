@@ -1,5 +1,5 @@
 import argparse
-import os.path
+import os
 
 import numpy as np
 import torch
@@ -53,7 +53,7 @@ def parse_args():
 
 
 def load_model(name: str, model_dir: str):
-    config = os.path.join("./configs", f"repcodec_dim{ALL_MODELS[name]}.yaml")
+    config = os.path.join(os.path.dirname(__file__), "configs", f"repcodec_dim{ALL_MODELS[name]}.yaml")
     with open(config) as fp:
         conf = yaml.load(fp, Loader=yaml.FullLoader)
     model = RepCodec(**conf)
@@ -85,7 +85,7 @@ def cli():
     os.makedirs(output_dir, exist_ok=True)
 
     with open(os.path.join(output_dir, f"{os.path.basename(input_file)}.tokens"), mode="w+") as fp:
-        fp.write(f"{' '.join(tokens)}\n")
+        fp.write(f"{' '.join(map(str, tokens))}\n")
 
 
 if __name__ == '__main__':
