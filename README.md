@@ -4,7 +4,8 @@
 
 ## Introduction
 
-**RepCodec** is a speech tokenization method for converting a speech waveform into a sequence of discrete semantic tokens.
+**RepCodec** is a speech tokenization method for converting a speech waveform into a sequence of discrete semantic
+tokens.
 The main idea is to train a representation codec which learns a vector quantization codebook through reconstructing the
 input speech representations from speech encoders like HuBERT or data2vec.
 Extensive experiments show that RepCodec significantly outperforms the widely used k-means clustering approach in both
@@ -54,11 +55,14 @@ with torch.no_grad():
 ```
 
 ## Acknowledge
+
 Our implementation is based on [facebookresearch/AudioDec](https://github.com/facebookresearch/AudioDec).
 We thank them for open-sourcing their code!
 
 ## Citation
+
 If you find our work useful, please cite the following article.
+
 ```
 
 ```
