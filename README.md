@@ -18,15 +18,36 @@ Also, RepCodec generalizes well across various speech encoders and languages.
 
 | Feature Type              | Speech Data                                              | Model        |
 |---------------------------|----------------------------------------------------------|--------------|
-| HuBERT base layer 9       | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1XD0HKl607FFjri2-VJT7lHQeSpxsCCFO/view?usp=sharing) |
-| HuBERT large layer 18     | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1mTbm5GeJ7gp_5L3QLP-JGXdf8RnRw5n6/view?usp=sharing) |
-| data2vec base layer 6     | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1d8sf3Ko_fYM9zlaiwxK_4xusLRKV5EMd/view?usp=sharing) |
-| data2vec large layer 18   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1nuRIHaejT-uVi4cluftbT8o_JZqar5SU/view?usp=sharing) |
-| Whisper medium layer 24   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1V6YJSA2V4iywXrecJAN0oqsa3aHowexZ/view?usp=sharing) |
-| Whisper large-v2 layer 32 | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1k_X7ZMPg8iOeDrIJe70v6CHfFygzufXC/view?usp=sharing) |
+| HuBERT base layer 9       | [Librispeech](http://www.openslr.org/12) train-clean-100 | [hubert_base_l9](https://drive.google.com/file/d/1XD0HKl607FFjri2-VJT7lHQeSpxsCCFO/view?usp=sharing) |
+| HuBERT large layer 18     | [Librispeech](http://www.openslr.org/12) train-clean-100 | [hubert_large_l18](https://drive.google.com/file/d/1mTbm5GeJ7gp_5L3QLP-JGXdf8RnRw5n6/view?usp=sharing) |
+| data2vec base layer 6     | [Librispeech](http://www.openslr.org/12) train-clean-100 | [data2vec_base_l6](https://drive.google.com/file/d/1d8sf3Ko_fYM9zlaiwxK_4xusLRKV5EMd/view?usp=sharing) |
+| data2vec large layer 18   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [data2vec_large_l18](https://drive.google.com/file/d/1nuRIHaejT-uVi4cluftbT8o_JZqar5SU/view?usp=sharing) |
+| Whisper medium layer 24   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [whisper_medium_l24](https://drive.google.com/file/d/1V6YJSA2V4iywXrecJAN0oqsa3aHowexZ/view?usp=sharing) |
+| Whisper large-v2 layer 32 | [Librispeech](http://www.openslr.org/12) train-clean-100 | [whisper_large_l32](https://drive.google.com/file/d/1k_X7ZMPg8iOeDrIJe70v6CHfFygzufXC/view?usp=sharing) |
 
 ## Speech Tokenization Using Pre-Trained Models
+
 ### Command Line Usage
+
+Please first install RepCodec by
+
+```
+git clone https://github.com/mct10/RepCodec.git
+cd RepCodec
+pip install .
+```
+
+Then, you can use the following command
+
+```
+repcodec /path/to/representaiton \
+    --model [data2vec_base_l6 | data2vec_large_l18 | hubert_base_l9 | hubert_large_l18 | whisper_medium_l24 | whisper_large_l32] \
+    --model_dir /dir/to/models \
+    [--use_gpu] \
+    [--out_dir /path/to/output]
+```
+
+and the output tokens will be saved to `out_dir`.
 
 ### Python usage
 
@@ -39,7 +60,7 @@ from repcodec.RepCodec import RepCodec
 # for feature types of HubERT base & data2vec base, please use repcodec_dim768.yaml;
 # for feature types of HuBERT large & data2vec large & Whisper medium, please use repcodec_dim1024.yaml;
 # for feature types of Whisper large-v2, please use repcodec_dim1280.yaml
-config = "./configs/repcodec_dim768.yaml"
+config = "repcodec/configs/repcodec_dim768.yaml"
 with open(config) as fp:
     conf = yaml.load(fp, Loader=yaml.FullLoader)
 
