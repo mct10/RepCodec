@@ -17,12 +17,12 @@ Also, RepCodec generalizes well across various speech encoders and languages.
 
 | Feature Type              | Speech Data                                              | Model        |
 |---------------------------|----------------------------------------------------------|--------------|
-| HuBERT base layer 9       | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download]() |
-| HuBERT large layer 18     | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download]() |
-| data2vec base layer 6     | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download]() |
-| data2vec large layer 18   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download]() |
-| Whisper medium layer 24   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download]() |
-| Whisper large-v2 layer 32 | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download]() |
+| HuBERT base layer 9       | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1XD0HKl607FFjri2-VJT7lHQeSpxsCCFO/view?usp=sharing) |
+| HuBERT large layer 18     | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1mTbm5GeJ7gp_5L3QLP-JGXdf8RnRw5n6/view?usp=sharing) |
+| data2vec base layer 6     | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1d8sf3Ko_fYM9zlaiwxK_4xusLRKV5EMd/view?usp=sharing) |
+| data2vec large layer 18   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1nuRIHaejT-uVi4cluftbT8o_JZqar5SU/view?usp=sharing) |
+| Whisper medium layer 24   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1V6YJSA2V4iywXrecJAN0oqsa3aHowexZ/view?usp=sharing) |
+| Whisper large-v2 layer 32 | [Librispeech](http://www.openslr.org/12) train-clean-100 | [download](https://drive.google.com/file/d/1k_X7ZMPg8iOeDrIJe70v6CHfFygzufXC/view?usp=sharing) |
 
 ## Speech Tokenization Using Pre-Trained Models
 
