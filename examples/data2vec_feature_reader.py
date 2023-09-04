@@ -1,12 +1,11 @@
 import logging
 
-from fairseq.checkpoint_utils import load_checkpoint_to_cpu
 import torch
 import torch.nn.functional as F
-from omegaconf import OmegaConf
-
 from fairseq import tasks
+from fairseq.checkpoint_utils import load_checkpoint_to_cpu
 from fairseq.data.audio.audio_utils import get_features_or_waveform
+from omegaconf import OmegaConf
 
 from data2vec_audio import Data2VecAudioModel
 
