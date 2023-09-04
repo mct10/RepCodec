@@ -73,7 +73,7 @@ class Data2vecFeatureReader(object):
                     source=x_chunk,
                     padding_mask=None,
                     mask=False,
-                    output_layer=self.layer,
+                    layer=self.layer,
                 )
                 feat_chunk = res["x"]
                 feat.append(feat_chunk)
