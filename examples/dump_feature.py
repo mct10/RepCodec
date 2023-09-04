@@ -15,8 +15,7 @@ logger = logging.getLogger("dump_feature")
 
 def main(
         model_type: str,
-        tsv_dir: str,
-        split: str,
+        tsv_path: str,
         ckpt_path: str,
         layer: int,
         nshard: int,
@@ -33,8 +32,8 @@ def main(
     else:
         raise ValueError(f"Unsupported model type {model_type}")
 
-    generator, num = get_path_iterator(f"{tsv_dir}/{split}.tsv", nshard, rank)
-    dump_feature(reader, generator, num, split, nshard, rank, feat_dir)
+    generator, num = get_path_iterator(tsv_path, nshard, rank)
+    dump_feature(reader, generator, num, nshard, rank, feat_dir)
 
 
 if __name__ == "__main__":
@@ -48,14 +47,9 @@ if __name__ == "__main__":
         help="the type of the speech encoder."
     )
     parser.add_argument(
-        "tsv_dir",
+        "tsv_path",
         type=str,
-        help="the dir for all tsv files."
-    )
-    parser.add_argument(
-        "split",
-        type=str,
-        help="the split of the data."
+        help="the path to the tsv file."
     )
     parser.add_argument(
         "ckpt_path",

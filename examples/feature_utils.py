@@ -1,8 +1,3 @@
-# Copyright (c) Facebook, Inc. and its affiliates.
-#
-# This source code is licensed under the MIT license found in the
-# LICENSE file in the root directory of this source tree.
-
 # ref: https://github.com/facebookresearch/fairseq/blob/main/examples/hubert/simple_kmeans/feature_utils.py
 
 import logging
@@ -47,11 +42,11 @@ def get_path_iterator(tsv, nshard, rank):
     return iterate, len(lines)
 
 
-def dump_feature(reader, generator, num, split, nshard, rank, feat_dir):
+def dump_feature(reader, generator, num, nshard, rank, feat_dir):
     iterator = generator()
 
-    feat_path = f"{feat_dir}/{split}_{rank}_{nshard}.npy"
-    leng_path = f"{feat_dir}/{split}_{rank}_{nshard}.len"
+    feat_path = f"{feat_dir}/{rank}_{nshard}.npy"
+    leng_path = f"{feat_dir}/{rank}_{nshard}.len"
 
     os.makedirs(feat_dir, exist_ok=True)
     if os.path.exists(feat_path):
