@@ -17,6 +17,8 @@ def main(
         model_type: str,
         tsv_path: str,
         ckpt_path: str,
+        whisper_root: str,
+        whisper_name: str,
         layer: int,
         nshard: int,
         rank: int,
@@ -26,14 +28,26 @@ def main(
 ):
     device = "cpu" if use_cpu else "cuda"
 
-    if model_type == "hubert":
-        from hubert_feature_reader import HubertFeatureReader
-        reader = HubertFeatureReader(ckpt_path, layer, device, max_chunk)
-    elif model_type == "data2vec":
-        from data2vec_feature_reader import Data2vecFeatureReader
-        reader = Data2vecFeatureReader(ckpt_path, layer, device, max_chunk)
+    # some checks
+    if model_type in ["hubert", "data2vec"]:
+        assert ckpt_path and os.path.exists(ckpt_path)
+    elif model_type in ["whisper"]:
+        assert whisper_name and whisper_root
     else:
         raise ValueError(f"Unsupported model type {model_type}")
+
+    reader = None
+    if model_type == "hubert":
+        from hubert_feature_reader import HubertFeatureReader
+        reader = HubertFeatureReader(ckpt_path, layer, device=device, max_chunk=max_chunk)
+    elif model_type == "data2vec":
+        from data2vec_feature_reader import Data2vecFeatureReader
+        reader = Data2vecFeatureReader(ckpt_path, layer, device=device, max_chunk=max_chunk)
+    elif model_type == "whisper":
+        from whisper_feature_reader import WhisperFeatureReader
+        reader = WhisperFeatureReader(whisper_root, whisper_name, layer, device=device)
+
+    assert reader is not None
 
     generator, num = get_path_iterator(tsv_path, nshard, rank)
     dump_feature(reader, generator, num, nshard, rank, feat_dir)
@@ -58,15 +72,30 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--ckpt_path",
-        required=True,
+        required=False,
         type=str,
-        help="path to the speech model."
+        default=None,
+        help="path to the speech model. must provide for HuBERT and data2vec"
+    )
+    parser.add_argument(
+        "--whisper_root",
+        required=False,
+        type=str,
+        default=None,
+        help="root dir to download/store whisper model. must provide for whisper model."
+    )
+    parser.add_argument(
+        "--whisper_name",
+        required=False,
+        type=str,
+        default=None,
+        help="name of whisper model. e.g., large-v2. must provide for whisper model."
     )
     parser.add_argument(
         "--layer",
         required=True,
         type=int,
-        help="which layer of the model. should be 1-based."
+        help="which layer of the model. this is 1-based."
     )
     parser.add_argument(
         "--nshard",
