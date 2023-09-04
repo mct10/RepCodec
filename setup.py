@@ -16,7 +16,7 @@ setup(
     package_data={
         "repcodec": ["configs/*.yaml"]
     },
-    install_requires=["numpy", "torch", "PyYAML"],
+    install_requires=["numpy", "tqdm", "torch", "PyYAML"],
     entry_points={
         'console_scripts': [
             "repcodec=repcodec.tokenize:cli"

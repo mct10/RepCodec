@@ -5,6 +5,7 @@ from typing import Tuple, List
 
 import numpy as np
 import torch
+import tqdm
 import yaml
 
 from repcodec.RepCodec import RepCodec
@@ -150,7 +151,7 @@ def cli():
     os.makedirs(output_dir, exist_ok=True)
 
     with open(os.path.join(output_dir, "tokens"), mode="w+") as fp:
-        for rank in range(n_shard):
+        for rank in tqdm.tqdm(range(n_shard)):
             shard_data, shard_lengths = load_shard(in_dir, rank, n_shard)
             for batch in make_batch_data(shard_data, shard_lengths, batch_size=batch_size):
                 batch_tokens = tokenize_batch(model, batch, device)
