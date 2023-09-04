@@ -1,6 +1,6 @@
 # RepCodec: A Speech Representation Codec for Speech Tokenization
 
-> [**RepCodec: A Speech Representation Codec for Speech Tokenization**]()
+> [**RepCodec: A Speech Representation Codec for Speech Tokenization**](https://arxiv.org/abs/2309.00169)
 
 ## Introduction
 
@@ -90,5 +90,12 @@ We thank them for open-sourcing their code!
 If you find our work useful, please cite the following article.
 
 ```
-
+@misc{huang2023repcodec,
+      title={RepCodec: A Speech Representation Codec for Speech Tokenization}, 
+      author={Zhichao Huang and Chutong Meng and Tom Ko},
+      year={2023},
+      eprint={2309.00169},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS}
+}
 ```
