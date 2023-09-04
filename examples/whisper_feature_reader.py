@@ -99,4 +99,4 @@ class WhisperFeatureReader(object):
             hidden = self.model.extract_features(mel.unsqueeze(0), target_layer=self.layer)
             feature_length = audio_length // 320
             hidden = hidden[0, :feature_length]
-        return hidden
+        return hidden.contiguous()
