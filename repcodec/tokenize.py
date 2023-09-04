@@ -82,7 +82,7 @@ def load_shard(in_dir: Path, rank: int, n_shard: int) -> Tuple[np.ndarray, List[
 
 
 def pad_data(data: List[np.ndarray]) -> List[np.ndarray]:
-    max_len = data[0].shape[0]
+    max_len = max([d.shape[0] for d in data])
     data = [
         np.pad(d, [(0, max_len - d.shape[0]), (0, 0)], "constant", constant_values=0.0)
         for d in data
@@ -94,10 +94,11 @@ def make_batch_data(data: np.ndarray, shard_lengths: List[int], batch_size: int)
     batch_data = []
     batch_lens = []
     offsets = np.cumsum([0] + shard_lengths)
+    assert len(data) == offsets[-1], f"{len(data)} {offsets[-1]}"
 
     # from longest to shortest
     for i in range(len(shard_lengths)):
-        if batch_size < len(batch_data):
+        if batch_size > len(batch_data):
             batch_data.append(data[offsets[i]: offsets[i + 1]])
             batch_lens.append(shard_lengths[i])
         else:
@@ -116,7 +117,12 @@ def make_batch_data(data: np.ndarray, shard_lengths: List[int], batch_size: int)
 
 def tokenize_batch(model: RepCodec, batch: dict, device: str) -> List[List[int]]:
     with torch.no_grad():
-        x = model.encoder(batch["data"].transpose(1, 2).to(device))  # (bsz, hidden dim, seq len)
+        data = batch["data"]
+        # for batch size = 1
+        if data.dim() == 2:
+            data = data.unsqueeze(0)
+        assert data.dim() == 3, data.dim()
+        x = model.encoder(data.transpose(1, 2).to(device))  # (bsz, hidden dim, seq len)
         z = model.projector(x)
         _, idx = model.quantizer.codebook.forward_index(z.transpose(2, 1))
         tokens = idx.cpu().data.numpy()[0]  # (bsz, max_len)
