@@ -21,8 +21,11 @@ def main(
         nshard: int,
         rank: int,
         feat_dir: str,
-        max_chunk: int
+        max_chunk: int,
+        use_cpu: bool = False
 ):
+    device = "cpu" if use_cpu else "cuda"
+
     if model_type == "hubert":
         from hubert_feature_reader import HubertFeatureReader
         reader = HubertFeatureReader(ckpt_path, layer, max_chunk)
@@ -81,6 +84,12 @@ if __name__ == "__main__":
         type=int,
         default=1600000,
         help="max number of frames of each batch."
+    )
+    parser.add_argument(
+        "--use_cpu",
+        default=False,
+        action="store_true",
+        help="whether use cpu instead of gpu."
     )
     args = parser.parse_args()
     logger.info(args)
