@@ -118,15 +118,15 @@ def make_batch_data(data: np.ndarray, shard_lengths: List[int], batch_size: int)
 def tokenize_batch(model: RepCodec, batch: dict, device: str) -> List[List[int]]:
     with torch.no_grad():
         data = batch["data"]
-        # for batch size = 1
-        if data.dim() == 2:
-            data = data.unsqueeze(0)
-        assert data.dim() == 3, data.dim()
         x = model.encoder(data.transpose(1, 2).to(device))  # (bsz, hidden dim, seq len)
         z = model.projector(x)
         _, idx = model.quantizer.codebook.forward_index(z.transpose(2, 1))
-        tokens = idx.cpu().data.numpy()[0]  # (bsz, max_len)
 
+    # when bsz=1: (1, seq len)
+    if idx.dim() == 2:
+        return idx.cpu().data.numpy().tolist()
+    # when bsz>1: (1, bsz, seq len)
+    tokens = idx.cpu().data.numpy().tolist()[0]
     res = []
     batch_lens = batch["lengths"]
     for i in range(len(tokens)):
@@ -152,7 +152,6 @@ def cli():
     with open(os.path.join(output_dir, "tokens"), mode="w+") as fp:
         for rank in range(n_shard):
             shard_data, shard_lengths = load_shard(in_dir, rank, n_shard)
-            assert shard_data.shape[0] == len(shard_lengths)
             for batch in make_batch_data(shard_data, shard_lengths, batch_size=batch_size):
                 batch_tokens = tokenize_batch(model, batch, device)
 
