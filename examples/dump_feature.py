@@ -28,10 +28,10 @@ def main(
 
     if model_type == "hubert":
         from hubert_feature_reader import HubertFeatureReader
-        reader = HubertFeatureReader(ckpt_path, layer, max_chunk)
+        reader = HubertFeatureReader(ckpt_path, layer, device, max_chunk)
     elif model_type == "data2vec":
         from data2vec_feature_reader import Data2vecFeatureReader
-        reader = Data2vecFeatureReader(ckpt_path, layer, max_chunk)
+        reader = Data2vecFeatureReader(ckpt_path, layer, device, max_chunk)
     else:
         raise ValueError(f"Unsupported model type {model_type}")
 
@@ -44,38 +44,45 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "model_type",
+        "--model_type",
+        required=True,
         type=str,
         choices=["data2vec", "hubert", "whisper"],
         help="the type of the speech encoder."
     )
     parser.add_argument(
-        "tsv_path",
+        "--tsv_path",
+        required=True,
         type=str,
         help="the path to the tsv file."
     )
     parser.add_argument(
-        "ckpt_path",
+        "--ckpt_path",
+        required=True,
         type=str,
         help="path to the speech model."
     )
     parser.add_argument(
-        "layer",
+        "--layer",
+        required=True,
         type=int,
         help="which layer of the model. should be 1-based."
     )
     parser.add_argument(
-        "nshard",
+        "--nshard",
+        required=True,
         type=int,
         help="total number of shards."
     )
     parser.add_argument(
-        "rank",
+        "--rank",
+        required=True,
         type=int,
         help="shard id of this process."
     )
     parser.add_argument(
-        "feat_dir",
+        "--feat_dir",
+        required=True,
         type=str,
         help="the output dir to save the features."
     )
