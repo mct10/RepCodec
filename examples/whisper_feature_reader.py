@@ -80,7 +80,7 @@ class WhisperFeatureReader(object):
         self.device = device
         logger.info(f"device = {self.device}")
 
-        self.model = load_model(name=ckpt, device=self.device, download_root=root).eval()
+        self.model: Whisper_ = load_model(name=ckpt, device=self.device, download_root=root).eval()
         self.model.decoder = None  # to save some memory by deleting the decoder
         self.layer = layer  # one-based
 
@@ -96,7 +96,7 @@ class WhisperFeatureReader(object):
         audio_length = len(wav)
         with torch.no_grad():
             mel = log_mel_spectrogram(torch.from_numpy(wav).float().cuda())
-            hidden = self.model.get_feature(mel.unsqueeze(0), target_layer=self.layer)
+            hidden = self.model.extract_features(mel.unsqueeze(0), target_layer=self.layer)
             feature_length = audio_length // 320
             hidden = hidden[0, :feature_length]
         return hidden

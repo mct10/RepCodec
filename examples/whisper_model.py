@@ -1,5 +1,6 @@
 from typing import Optional
 
+import torch
 import torch.nn.functional as F
 from torch import Tensor
 from whisper.model import AudioEncoder, sinusoids, Whisper, ModelDimensions
@@ -44,3 +45,6 @@ class Whisper_(Whisper):
             self.dims.n_audio_head,
             self.dims.n_audio_layer,
         )
+
+    def extract_features(self, mel: torch.Tensor, target_layer: Optional[int] = None):
+        return self.encoder.extract_feature(mel, target_layer)
