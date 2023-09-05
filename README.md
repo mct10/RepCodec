@@ -37,6 +37,9 @@ cd RepCodec
 pip install .
 ```
 
+We used Python 3.9.18 and PyTorch 1.12.1 to test the usage, but the code should be compatible with other recent Python
+and PyTorch versions.
+
 ### Representation Preparation
 
 We adapt the `dump_hubert_feature.py` script
@@ -114,7 +117,8 @@ python wav2vec_manifest.py \
   --valid-percent 0
 ```
 
-you can obtain the `dev-clean.tsv` in `/dir/to/manifest` for LibriSpeech. (By default, the output file name is `train.tsv`. Remember to rename the file.)
+you can obtain the `dev-clean.tsv` in `/dir/to/manifest` for LibriSpeech. (By default, the output file name
+is `train.tsv`. Remember to rename the file.)
 
 It should be similar to:
 
@@ -152,7 +156,7 @@ For other useful functionalities (e.g., sharding), please check the argument lis
 We expect to have `${feat_dir}/0_1.npy` and `${feat_dir}/0_1.len` in the provided
 directory `/dir/to/representaitons`.
 
-Also, the tsv file should be the same as the one generated in [Representation Preparation](#representation-preparation).
+Also, the tsv file should be the **same** as the one generated in [Representation Preparation](#representation-preparation).
 
 ```
 repcodec /dir/to/representaitons \
@@ -163,18 +167,20 @@ repcodec /dir/to/representaitons \
 ```
 
 This command will tokenize the representations and the output discrete tokens will be saved to `${out_dir}/tokens`.
-
-Under `examples/tokens`, we provide some token files as references. They are obtained from LibriSpeech dev-clean subset
-using the 6 types of representations and corresponding RepCodec models in [Pre-trained Models](#pre-trained-models).
-Your results should be very similar to ours.
-
 The tokens are in the same order as the provided tsv file.
 
 An example of the output file:
 
 ```
-
+/dir/to/LibriSpeech/dev-clean
+2277/149896/2277-149896-0026.flac	696 696 198 198 198 498 ...
+2277/149896/2277-149896-0005.flac	696 696 198 198 198 907 ...
+2277/149896/2277-149896-0033.flac	696 696 198 198 198 696 ...
 ```
+
+Under `examples/tokens`, we provide some token files as references. They are obtained from LibriSpeech dev-clean subset
+using the 6 types of representations and corresponding RepCodec models in [Pre-trained Models](#pre-trained-models).
+Your results should be very similar to ours.
 
 ### Python Usage
 
