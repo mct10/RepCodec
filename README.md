@@ -43,7 +43,7 @@ We adapt the `dump_hubert_feature.py` script
 from [fairseq](https://github.com/facebookresearch/fairseq/tree/main/examples/hubert/simple_kmeans#hubert-feature)
 to support dumping representations from data2vec, HuBERT, and Whisper encoders.
 
-To use our script (`examples/dump_feature.py`), please also install the following packages:
+If you use our script (`examples/dump_feature.py`), please also install the following packages:
 
 ```
 pip install npy_append_array soundfile tqdm 
@@ -77,7 +77,7 @@ do
         --layer ${layer} \
         --nshard ${n_shard} \
         --rank $((${rank} - 1)) \
-        --feat_dir /dir/to/save/features
+        --feat_dir /dir/to/save/representations
     set +x
 done
 
@@ -97,7 +97,7 @@ do
         --layer ${layer} \
         --nshard ${n_shard} \
         --rank $((${rank} - 1)) \
-        --feat_dir /dir/to/save/features
+        --feat_dir /dir/to/save/representations
     set +x
 done
 ```
@@ -132,10 +132,10 @@ and `${feat_dir}/${rank}_${n_shard}.len`.
 ### Command Line Usage
 
 We expect to have `${feat_dir}/${rank}_${n_shard}.npy` and `${feat_dir}/${rank}_${n_shard}.len` in the provided
-directory `/dir/to/representaiton`.
+directory `/dir/to/representaitons`.
 
 ```
-repcodec /dir/to/representaiton \
+repcodec /dir/to/representaitons \
     --n_shard ${n_shard} \
     --model /path/to/model \
     [--use_gpu] \
@@ -145,7 +145,11 @@ repcodec /dir/to/representaiton \
 Here, `${n_shard}` should be the same value as the one you used to dump the representations.
 
 This command will tokenize **all** shards of representations and the discrete tokens will be saved to a **single**
-file as `out_dir/tokens`.
+file `${out_dir}/tokens`.
+
+Under `examples/tokens`, we provide the token files as references. They are obtained from LibriSpeech dev-clean subset
+using the 6 types of representations and corresponding RepCodec models in [Pre-trained Models](#pre-trained-models).
+Your results should be very similar to ours.
 
 ### Python Usage
 

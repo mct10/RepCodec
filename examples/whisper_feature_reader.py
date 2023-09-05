@@ -95,7 +95,7 @@ class WhisperFeatureReader(object):
         wav = self.read_audio(path, ref_len)
         audio_length = len(wav)
         with torch.no_grad():
-            mel = log_mel_spectrogram(torch.from_numpy(wav).float().cuda())
+            mel = log_mel_spectrogram(torch.from_numpy(wav).float().to(self.device))
             hidden = self.model.extract_features(mel.unsqueeze(0), target_layer=self.layer)
             feature_length = audio_length // 320
             hidden = hidden[0, :feature_length]

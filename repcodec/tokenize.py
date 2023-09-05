@@ -104,14 +104,14 @@ def make_batch_data(data: np.ndarray, shard_lengths: List[int], batch_size: int)
             batch_lens.append(shard_lengths[i])
         else:
             yield {
-                "data": torch.from_numpy(np.stack(pad_data(batch_data))),  # (bsz, seq len, hidden dim)
+                "data": torch.tensor(np.stack(pad_data(batch_data)), dtype=torch.float),  # (bsz, seq len, hidden dim)
                 "lengths": batch_lens
             }
             batch_data = [data[offsets[i]: offsets[i + 1]]]
             batch_lens = [shard_lengths[i]]
     if len(batch_data) > 0:
         yield {
-            "data": torch.from_numpy(np.stack(pad_data(batch_data))),
+            "data": torch.tensor(np.stack(pad_data(batch_data)), dtype=torch.float),
             "lengths": batch_lens
         }
 
