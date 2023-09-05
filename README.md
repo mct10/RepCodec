@@ -137,7 +137,7 @@ directory `/dir/to/representaitons`.
 ```
 repcodec /dir/to/representaitons \
     --n_shard ${n_shard} \
-    --model /path/to/model \
+    --model /path/to/repcodec/model \
     [--use_gpu] \
     [--out_dir /path/to/output]
 ```
