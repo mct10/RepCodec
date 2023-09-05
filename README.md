@@ -102,7 +102,11 @@ do
 done
 ```
 
-The tsv file should have the format of
+Explanations about the args:
+- **model_type:** choose from `data2vec`, `hubert`, and `whisper`.
+
+- **tsv_path:** path of the tsv file.
+Should have the format of
 
 ```
 /dir/to/dataset
@@ -118,15 +122,25 @@ For example,
 2277/149896/2277-149896-0005.flac	89600
 2277/149896/2277-149896-0033.flac	45520
 ```
-
-Also note that, for data2vec and HuBERT, you need to download the model
+- **ckpt_path**:
+must provide for data2vec and HuBERT.
+You need to download the model
 from [data2vec website](https://github.com/facebookresearch/fairseq/blob/main/examples/data2vec/README.md#speech-2)
 or [HuBERT website](https://github.com/facebookresearch/fairseq/tree/main/examples/hubert#pre-trained-and-fine-tuned-asr-models)
-yourself and provide `--ckpt_path` as the path of the model.
-For Whisper, please provide **BOTH** `--whisper_root` and `--whisper_name`.
+yourself.
+`--ckpt_path` is the path of the data2vec/HuBERT model.
+- **whisper_root** and  **whisper_name**:
+for Whisper, please provide **BOTH** `--whisper_root` and `--whisper_name`.
 If there is no corresponding model in `--whisper_root`, then the script will download for you.
 
-The output representations will be saved to `${feat_dir}/${rank}_${n_shard}.npy`
+- **layer**:
+which layer of the model should the representations be extracted from.
+It is **1-based**.
+
+- **nshard:** how many shards should the dataset be splited into.
+- **rank:** the rank<sup>th</sup> of the shard to be processed.
+
+- **feat_dir**: The output representations will be saved to `${feat_dir}/${rank}_${n_shard}.npy`
 and `${feat_dir}/${rank}_${n_shard}.len`.
 
 ### Command Line Usage
