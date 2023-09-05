@@ -138,7 +138,7 @@ which layer of the model should the representations be extracted from.
 It is **1-based**.
 
 - **nshard:** how many shards should the dataset be splited into.
-- **rank:** the rank<sup>th</sup> of the shard to be processed.
+- **rank:** the rank<sup>th</sup> shard to be processed. Range: [0, nshard)
 
 - **feat_dir**: The output representations will be saved to `${feat_dir}/${rank}_${n_shard}.npy`
 and `${feat_dir}/${rank}_${n_shard}.len`.
