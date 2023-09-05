@@ -16,14 +16,14 @@ Also, RepCodec generalizes well across various speech encoders and languages.
 
 ## Pre-Trained Models
 
-| Feature Type              | Speech Data                                              | Model        |
-|---------------------------|----------------------------------------------------------|--------------|
-| HuBERT base layer 9       | [Librispeech](http://www.openslr.org/12) train-clean-100 | [hubert_base_l9](https://drive.google.com/file/d/1XD0HKl607FFjri2-VJT7lHQeSpxsCCFO/view?usp=sharing) |
-| HuBERT large layer 18     | [Librispeech](http://www.openslr.org/12) train-clean-100 | [hubert_large_l18](https://drive.google.com/file/d/1mTbm5GeJ7gp_5L3QLP-JGXdf8RnRw5n6/view?usp=sharing) |
-| data2vec base layer 6     | [Librispeech](http://www.openslr.org/12) train-clean-100 | [data2vec_base_l6](https://drive.google.com/file/d/1d8sf3Ko_fYM9zlaiwxK_4xusLRKV5EMd/view?usp=sharing) |
-| data2vec large layer 18   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [data2vec_large_l18](https://drive.google.com/file/d/1nuRIHaejT-uVi4cluftbT8o_JZqar5SU/view?usp=sharing) |
-| Whisper medium layer 24   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [whisper_medium_l24](https://drive.google.com/file/d/1V6YJSA2V4iywXrecJAN0oqsa3aHowexZ/view?usp=sharing) |
-| Whisper large-v2 layer 32 | [Librispeech](http://www.openslr.org/12) train-clean-100 | [whisper_large_l32](https://drive.google.com/file/d/1k_X7ZMPg8iOeDrIJe70v6CHfFygzufXC/view?usp=sharing) |
+| Feature Type                                                                                                          | Speech Data                                              | RepCodec Model                                                                                           |
+|-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| [HuBERT base](https://github.com/facebookresearch/fairseq/tree/main/examples/hubert#pre-trained-and-fine-tuned-asr-models) layer 9     | [Librispeech](http://www.openslr.org/12) train-clean-100 | [hubert_base_l9](https://drive.google.com/file/d/1XD0HKl607FFjri2-VJT7lHQeSpxsCCFO/view?usp=sharing)     |
+| [HuBERT large](https://github.com/facebookresearch/fairseq/tree/main/examples/hubert#pre-trained-and-fine-tuned-asr-models) layer 18   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [hubert_large_l18](https://drive.google.com/file/d/1mTbm5GeJ7gp_5L3QLP-JGXdf8RnRw5n6/view?usp=sharing)   |
+| [data2vec base](https://github.com/facebookresearch/fairseq/blob/main/examples/data2vec/README.md#speech-2) layer 6   | [Librispeech](http://www.openslr.org/12) train-clean-100 | [data2vec_base_l6](https://drive.google.com/file/d/1d8sf3Ko_fYM9zlaiwxK_4xusLRKV5EMd/view?usp=sharing)   |
+| [data2vec large](https://github.com/facebookresearch/fairseq/blob/main/examples/data2vec/README.md#speech-2) layer 18 | [Librispeech](http://www.openslr.org/12) train-clean-100 | [data2vec_large_l18](https://drive.google.com/file/d/1nuRIHaejT-uVi4cluftbT8o_JZqar5SU/view?usp=sharing) |
+| [Whisper medium](https://github.com/openai/whisper/tree/main#available-models-and-languages) layer 24                 | [Librispeech](http://www.openslr.org/12) train-clean-100 | [whisper_medium_l24](https://drive.google.com/file/d/1V6YJSA2V4iywXrecJAN0oqsa3aHowexZ/view?usp=sharing) |
+| [Whisper large-v2](https://github.com/openai/whisper/tree/main#available-models-and-languages) layer 32                                                                                         | [Librispeech](http://www.openslr.org/12) train-clean-100 | [whisper_large_l32](https://drive.google.com/file/d/1k_X7ZMPg8iOeDrIJe70v6CHfFygzufXC/view?usp=sharing)  |
 
 ## Speech Tokenization Using Pre-Trained Models
 
@@ -41,7 +41,7 @@ pip install .
 
 We adapt the `dump_hubert_feature.py` script
 from [fairseq](https://github.com/facebookresearch/fairseq/tree/main/examples/hubert/simple_kmeans#hubert-feature)
-to support dumping representations from data2vec, HuBERT, and Whisper encoders.
+to support dumping representations from **data2vec**, **HuBERT**, or **Whisper** encoders.
 
 If you use our script (`examples/dump_feature.py`), please also install the following packages:
 
@@ -59,62 +59,62 @@ Additionally, if you want to dump representations from
   latest
   Whisper.
 
-Then, you can follow the given example to dump representations:
+Then, you can follow the given examples to dump representations:
 
 ```
 # Example 1: dump from HuBERT base layer 9 
 # (for data2vec, simply change "model_type" to data2vec and "ckpt_path" to the path of data2vec model)
-layer=9
-n_shard=4
 
-for rank in $(seq 1 ${n_shard})
-do
-    set -x
-    python3 examples/dump_feature.py \
-        --model_type hubert \
-        --tsv_path /path/to/tsv/file \
-        --ckpt_path /path/to/HuBERT/model  \
-        --layer ${layer} \
-        --nshard ${n_shard} \
-        --rank $((${rank} - 1)) \
-        --feat_dir /dir/to/save/representations
-    set +x
-done
+layer=9
+
+python3 examples/dump_feature.py \
+    --model_type hubert \
+    --tsv_path /path/to/tsv/file \
+    --ckpt_path /path/to/HuBERT/model  \
+    --layer ${layer} \
+    --feat_dir /dir/to/save/representations
 
 
 # Example 2: dump from Whisper medium layer 24
-layer=24
-n_shard=4
 
-for rank in $(seq 1 ${n_shard})
-do
-    set -x
-    python3 examples/dump_feature.py \
-        --model_type whisper \
-        --tsv_path /path/to/tsv/file \
-        --whisper_root /directory/to/save/whisper/model \
-        --whisper_name "medium" \
-        --layer ${layer} \
-        --nshard ${n_shard} \
-        --rank $((${rank} - 1)) \
-        --feat_dir /dir/to/save/representations
-    set +x
-done
+layer=24
+
+python3 examples/dump_feature.py \
+    --model_type whisper \
+    --tsv_path /path/to/tsv/file \
+    --whisper_root /directory/to/save/whisper/model \
+    --whisper_name medium \
+    --layer ${layer} \
+    --feat_dir /dir/to/save/representations
 ```
 
 Explanations about the args:
+
 - **model_type:** choose from `data2vec`, `hubert`, and `whisper`.
 
 - **tsv_path:** path of the tsv file.
-Should have the format of
+  Should have the format of
 
 ```
 /dir/to/dataset
-path_of_utterance_1 number_of_samples
-path_of_utterance_2 number_of_samples
+path_of_utterance_1 number_of_frames
+path_of_utterance_2 number_of_frames
 ```
 
-For example,
+You can follow [this script](https://github.com/facebookresearch/fairseq/blob/main/examples/wav2vec/wav2vec_manifest.py)
+to generate the tsv file.
+
+For example, by running
+
+```
+python wav2vec_manifest.py \
+  /dir/to/LibriSpeech/dev-clean \
+  --dest /dir/to/manifest \
+  --ext flac \
+  --valid-percent 0
+```
+
+you can obtain the `dev-clean.tsv` in `/dir/to/manifest` for LibriSpeech, which should be similar to:
 
 ```
 /dir/to/LibriSpeech/dev-clean
@@ -122,48 +122,57 @@ For example,
 2277/149896/2277-149896-0005.flac	89600
 2277/149896/2277-149896-0033.flac	45520
 ```
+
 - **ckpt_path**:
-must provide for data2vec and HuBERT.
-You need to download the model
-from [data2vec website](https://github.com/facebookresearch/fairseq/blob/main/examples/data2vec/README.md#speech-2)
-or [HuBERT website](https://github.com/facebookresearch/fairseq/tree/main/examples/hubert#pre-trained-and-fine-tuned-asr-models)
-yourself.
-`--ckpt_path` is the path of the data2vec/HuBERT model.
+  must provide for data2vec and HuBERT.
+  You need to download the model
+  from [data2vec website](https://github.com/facebookresearch/fairseq/blob/main/examples/data2vec/README.md#speech-2)
+  or [HuBERT website](https://github.com/facebookresearch/fairseq/tree/main/examples/hubert#pre-trained-and-fine-tuned-asr-models)
+  yourself.
+  `--ckpt_path` is the path of the data2vec/HuBERT model.
 - **whisper_root** and  **whisper_name**:
-for Whisper, please provide **BOTH** `--whisper_root` and `--whisper_name`.
-If there is no corresponding model in `--whisper_root`, then the script will download for you.
+  must provide **BOTH** `--whisper_root` and `--whisper_name` for Whisper.
+  If there is no corresponding model in `--whisper_root`, the script will download for you.
 
 - **layer**:
-which layer of the model should the representations be extracted from.
-It is **1-based**.
+  which Transformer encoder layer of the model should the representations be extracted from.
+  It is **1-based**.
+  For example, if layer=9, then the outputs from the 9<sup>th</sup> Transformer encoder layer are dumped.
+  Range: [1, number of Transformer encoder layers]
 
-- **nshard:** how many shards should the dataset be splited into.
-- **rank:** the rank<sup>th</sup> shard to be processed. Range: [0, nshard)
+- **feat_dir**: The output representations will be saved to `${feat_dir}/0_1.npy`
+  and `${feat_dir}/0_1.len`.
 
-- **feat_dir**: The output representations will be saved to `${feat_dir}/${rank}_${n_shard}.npy`
-and `${feat_dir}/${rank}_${n_shard}.len`.
+For other useful functionalities (e.g., sharding), please check the argument list in `examples/dump_feature.py`.
 
 ### Command Line Usage
 
-We expect to have `${feat_dir}/${rank}_${n_shard}.npy` and `${feat_dir}/${rank}_${n_shard}.len` in the provided
+We expect to have `${feat_dir}/0_1.npy` and `${feat_dir}/0_1.len` in the provided
 directory `/dir/to/representaitons`.
+
+Also, the tsv file should be the same as the one generated in [Representation Preparation](#representation-preparation).
 
 ```
 repcodec /dir/to/representaitons \
-    --n_shard ${n_shard} \
     --model /path/to/repcodec/model \
+    --tsv_path /path/to/tsv/file \
     [--use_gpu] \
     [--out_dir /path/to/output]
 ```
 
-Here, `${n_shard}` should be the same value as the one you used to dump the representations.
-
-This command will tokenize **all** shards of representations and the output discrete tokens will be saved to a **single**
-file `${out_dir}/tokens`.
+This command will tokenize the representations and the output discrete tokens will be saved to `${out_dir}/tokens`.
 
 Under `examples/tokens`, we provide some token files as references. They are obtained from LibriSpeech dev-clean subset
 using the 6 types of representations and corresponding RepCodec models in [Pre-trained Models](#pre-trained-models).
 Your results should be very similar to ours.
+
+The tokens are in the same order as the provided tsv file.
+
+An example of the output file:
+
+```
+
+```
 
 ### Python Usage
 

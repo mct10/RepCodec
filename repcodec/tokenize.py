@@ -5,8 +5,8 @@ from typing import Tuple, List
 
 import numpy as np
 import torch
-import tqdm
 import yaml
+from tqdm import tqdm
 
 from repcodec.RepCodec import RepCodec
 
@@ -25,19 +25,26 @@ def parse_args():
     parser.add_argument(
         "in_dir",
         type=str,
-        help="direcory of representations to be tokenized."
-    )
-    parser.add_argument(
-        "--n_shard",
-        required=True,
-        type=int,
-        help="number of shards of representations"
+        help="directory of representations to be tokenized."
     )
     parser.add_argument(
         "--model",
         required=True,
         type=str,
-        help="path of the RepCodec model"
+        help="path of the RepCodec model."
+    )
+    parser.add_argument(
+        "--tsv_path",
+        required=True,
+        type=str,
+        help="path of the tsv file."
+    )
+    parser.add_argument(
+        "--n_shard",
+        required=False,
+        type=int,
+        default=1,
+        help="number of shards of representations."
     )
     parser.add_argument(
         "--use_gpu",
@@ -118,8 +125,8 @@ def make_batch_data(data: np.ndarray, shard_lengths: List[int], batch_size: int)
 
 def tokenize_batch(model: RepCodec, batch: dict, device: str) -> List[List[int]]:
     with torch.no_grad():
-        data = batch["data"]
-        x = model.encoder(data.transpose(1, 2).to(device))  # (bsz, hidden dim, seq len)
+        data = batch["data"].transpose(1, 2).to(device)  # (bsz, hidden dim, seq len)
+        x = model.encoder(data)
         z = model.projector(x)
         _, idx = model.quantizer.codebook.forward_index(z.transpose(2, 1))
 
@@ -136,6 +143,15 @@ def tokenize_batch(model: RepCodec, batch: dict, device: str) -> List[List[int]]
     return res
 
 
+def load_tsv(path: str):
+    with open(path) as fp:
+        root = fp.readline().strip()
+        names = []
+        for line in fp:
+            names.append(line.strip().split("\t")[0])
+    return root, names
+
+
 def cli():
     args = parse_args()
     device = "cuda" if args.use_gpu else "cpu"
@@ -147,17 +163,30 @@ def cli():
     n_shard = args.n_shard
     batch_size = args.batch_size
 
+    root_dir, file_names = load_tsv(args.tsv_path)
+
     output_dir = args.out_dir
     os.makedirs(output_dir, exist_ok=True)
 
+    processed_cnt = 0
+    pbar = tqdm(total=len(file_names))
     with open(os.path.join(output_dir, "tokens"), mode="w+") as fp:
-        for rank in tqdm.tqdm(range(n_shard)):
+        fp.write(f"{root_dir}\n")
+
+        for rank in range(n_shard):
+            pbar.set_description(desc=f"[{rank}/{n_shard}]")
             shard_data, shard_lengths = load_shard(in_dir, rank, n_shard)
             for batch in make_batch_data(shard_data, shard_lengths, batch_size=batch_size):
                 batch_tokens = tokenize_batch(model, batch, device)
 
                 for tokens in batch_tokens:
-                    fp.write(f"{' '.join(map(str, tokens))}\n")
+                    fp.write(f"{file_names[processed_cnt]}\t{' '.join(map(str, tokens))}\n")
+                    processed_cnt += 1
+
+                pbar.update(len(batch_tokens))
+    assert processed_cnt == len(file_names), f"# lines of tsv do not match # of representations!"
+
+    pbar.close()
 
 
 if __name__ == '__main__':

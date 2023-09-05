@@ -98,22 +98,24 @@ if __name__ == "__main__":
         help="which layer of the model. this is 1-based."
     )
     parser.add_argument(
-        "--nshard",
+        "--feat_dir",
         required=True,
+        type=str,
+        help="the output dir to save the representations."
+    )
+    parser.add_argument(
+        "--nshard",
+        required=False,
         type=int,
+        default=1,
         help="total number of shards."
     )
     parser.add_argument(
         "--rank",
-        required=True,
+        required=False,
         type=int,
+        default=0,
         help="shard id of this process."
-    )
-    parser.add_argument(
-        "--feat_dir",
-        required=True,
-        type=str,
-        help="the output dir to save the features."
     )
     parser.add_argument(
         "--max_chunk",
