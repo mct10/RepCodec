@@ -158,10 +158,10 @@ repcodec /dir/to/representaitons \
 
 Here, `${n_shard}` should be the same value as the one you used to dump the representations.
 
-This command will tokenize **all** shards of representations and the discrete tokens will be saved to a **single**
+This command will tokenize **all** shards of representations and the output discrete tokens will be saved to a **single**
 file `${out_dir}/tokens`.
 
-Under `examples/tokens`, we provide the token files as references. They are obtained from LibriSpeech dev-clean subset
+Under `examples/tokens`, we provide some token files as references. They are obtained from LibriSpeech dev-clean subset
 using the 6 types of representations and corresponding RepCodec models in [Pre-trained Models](#pre-trained-models).
 Your results should be very similar to ours.
 
