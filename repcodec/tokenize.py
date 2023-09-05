@@ -186,6 +186,7 @@ def cli():
     assert processed_cnt == len(file_names), f"# lines of tsv do not match # of representations!"
 
     pbar.close()
+    print("Tokenize successfully!")
 
 
 if __name__ == '__main__':
