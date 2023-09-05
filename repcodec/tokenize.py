@@ -174,7 +174,6 @@ def cli():
         fp.write(f"{root_dir}\n")
 
         for rank in range(n_shard):
-            pbar.set_description(desc=f"[{rank}/{n_shard}]")
             shard_data, shard_lengths = load_shard(in_dir, rank, n_shard)
             for batch in make_batch_data(shard_data, shard_lengths, batch_size=batch_size):
                 batch_tokens = tokenize_batch(model, batch, device)

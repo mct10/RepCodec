@@ -46,7 +46,7 @@ to support dumping representations from **data2vec**, **HuBERT**, or **Whisper**
 If you use our script (`examples/dump_feature.py`), please also install the following packages:
 
 ```
-pip install npy_append_array soundfile tqdm 
+pip install npy_append_array soundfile 
 ```
 
 Additionally, if you want to dump representations from
@@ -114,7 +114,9 @@ python wav2vec_manifest.py \
   --valid-percent 0
 ```
 
-you can obtain the `dev-clean.tsv` in `/dir/to/manifest` for LibriSpeech, which should be similar to:
+you can obtain the `dev-clean.tsv` in `/dir/to/manifest` for LibriSpeech. (By default, the output file name is `train.tsv`. Remember to rename the file.)
+
+It should be similar to:
 
 ```
 /dir/to/LibriSpeech/dev-clean
