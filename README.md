@@ -156,7 +156,7 @@ For other useful functionalities (e.g., sharding), please check the argument lis
 We expect to have `${feat_dir}/0_1.npy` and `${feat_dir}/0_1.len` in the provided
 directory `/dir/to/representaitons`.
 
-Also, the tsv file should be the **same** as the one generated in [Representation Preparation](#representation-preparation).
+Also, the tsv file should be the **same** as the one used in [Representation Preparation](#representation-preparation).
 
 ```
 repcodec /dir/to/representaitons \
