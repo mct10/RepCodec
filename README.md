@@ -14,7 +14,7 @@ Also, RepCodec generalizes well across various speech encoders and languages.
 
 <img src="images/RepCodec.png" alt="se" width="1000" />
 
-## Pre-Trained Models
+## RepCodec Models
 
 | Feature Type                                                                                                          | Speech Data                                              | RepCodec Model                                                                                           |
 |-----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
@@ -179,7 +179,7 @@ An example of the output file:
 ```
 
 Under `examples/tokens`, we provide some token files as references. They are obtained from LibriSpeech dev-clean subset
-using the 6 types of representations and corresponding RepCodec models in [Pre-trained Models](#pre-trained-models).
+using the 6 types of representations and corresponding [RepCodec Models](#repcodec-models).
 Your results should be very similar to ours.
 
 ### Python Usage
