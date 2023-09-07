@@ -1,3 +1,11 @@
+# Copyright (c) ByteDance, Inc. and its affiliates.
+# Copyright (c) Chutong Meng
+# 
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+# Based on fairseq (https://github.com/facebookresearch/fairseq) and
+# Whisper (https://github.com/openai/whisper/)
+
 import io
 import logging
 import os
