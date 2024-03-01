@@ -162,9 +162,14 @@ Also, the tsv file should be the **same** as the one used in [Representation Pre
 repcodec /dir/to/representaitons \
     --model /path/to/repcodec/model \
     --tsv_path /path/to/tsv/file \
+    [--model_config_path /path/to/train/config] \
     [--use_gpu] \
     [--out_dir /path/to/output]
 ```
+
+If you trained the model yourself following [Training New RepCodec Models](#training-new-repcodec-models), 
+please provide the training config file using `--model_config_path`.
+If you use the model we provide [here](#repcodec-models), then you do not have to provide that.
 
 This command will tokenize the representations and the output discrete tokens will be saved to `${out_dir}/tokens`.
 The tokens are in the same order as the provided tsv file.
@@ -210,6 +215,42 @@ with torch.no_grad():
     _, idx = model.quantizer.codebook.forward_index(z.transpose(2, 1))
     tokens = idx.cpu().data.numpy().tolist()[0]
 ```
+
+## Training New RepCodec Models
+
+We use a config file to set up all the training configurations, e.g., data, model architecture,
+optimizer, scheduler. 
+We provide an example [here](./train_configs/ex_dim768_mse.yaml).
+
+Please first install required packages following [Installation](#installation) 
+and prepare the representations following [Representation Preparation](#representation-preparation). 
+
+The input data directory is expected to have the following structure
+```
+/dir/to/representations/
+  train_set_name/
+    0_1.npy
+    0_1.len
+  valid_set_name/
+    0_1.npy
+    0_1.len
+  test_set_name/
+    0_1.npy
+    0_1.len
+```
+
+The names of subsets should be the same as the fields in the config file.
+
+Then, you can run training by
+```
+python train.py \
+  -c /path/to/config/file \
+  --tag $tag \
+  --exp_root exp
+```
+
+`tag` is the name of the output folder.
+All outputs will be saved to `exp_root/tag/`.
 
 ## Acknowledge
 

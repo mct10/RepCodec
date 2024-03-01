@@ -7,7 +7,7 @@
 import argparse
 import os
 from pathlib import Path
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 
 import numpy as np
 import torch
@@ -46,6 +46,12 @@ def parse_args():
         help="path of the tsv file."
     )
     parser.add_argument(
+        "--model_config_path",
+        default=None,
+        type=str,
+        help="please provide this training config if you are using the model you trained yourself."
+    )
+    parser.add_argument(
         "--n_shard",
         required=False,
         type=int,
@@ -73,11 +79,18 @@ def parse_args():
     return parser.parse_args()
 
 
-def load_model(model_path: str):
-    name = os.path.basename(model_path).strip(".pkl")
-    config = os.path.join(os.path.dirname(__file__), "configs", f"repcodec_dim{ALL_MODELS[name]}.yaml")
-    with open(config) as fp:
-        conf = yaml.load(fp, Loader=yaml.FullLoader)
+def load_model(model_path: str, config_path: Optional[str] = None):
+    if config_path is None:
+        name = os.path.basename(model_path).strip(".pkl")
+        assert name in ALL_MODELS.keys(), f"Cannot find configs for {model_path}. " \
+                                          f"Please provide the config file you used for training."
+        config = os.path.join(os.path.dirname(__file__), "configs", f"repcodec_dim{ALL_MODELS[name]}.yaml")
+        with open(config) as fp:
+            conf = yaml.load(fp, Loader=yaml.FullLoader)
+    else:
+        with open(config_path) as fp:
+            conf = yaml.load(fp, Loader=yaml.FullLoader)["model_params"]
+
     model = RepCodec(**conf)
     model.load_state_dict(torch.load(model_path, map_location="cpu")["model"]["repcodec"])
     model.quantizer.initial()
@@ -162,7 +175,7 @@ def cli():
     args = parse_args()
     device = "cuda" if args.use_gpu else "cpu"
 
-    model = load_model(model_path=args.model)
+    model = load_model(model_path=args.model, config_path=args.model_config_path)
     model.to(device)
 
     in_dir = Path(args.in_dir)
