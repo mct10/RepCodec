@@ -252,6 +252,58 @@ python train.py \
 `tag` is the name of the output folder.
 All outputs will be saved to `exp_root/tag/`.
 
+## Vocoder
+
+| Feature Type                                                                                                                         | Speech Data                       | Vocoder                                                                                                |
+|--------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|--------------------------------------------------------------------------------------------------------|
+| [HuBERT large](https://github.com/facebookresearch/fairseq/tree/main/examples/hubert#pre-trained-and-fine-tuned-asr-models) layer 18 | [VCTK](https://datashare.ed.ac.uk/handle/10283/3443) | [hubert_large_l18](https://drive.google.com/file/d/1jUmm50qYlzbjQYwv-DySqjBVg9ERDqta/view?usp=sharing) |
+
+We train our vocoders following [facebookresearch/speech-resynthesis](https://github.com/facebookresearch/speech-resynthesis).
+Please install necessary packages and follow detailed instructions there.
+We provide only an example for VCTK dataset here. All commands should be run under the directory of `speech-resynthesis`.
+
+**Data preparation**
+
+Please download VCTK [here](https://datashare.ed.ac.uk/handle/10283/3443), 
+run [preprocessing](https://github.com/facebookresearch/speech-resynthesis/tree/main?tab=readme-ov-file#for-vctk), 
+and train a RepCodec model on it.
+
+Then you can prepare the data as the format of [this file](https://github.com/facebookresearch/speech-resynthesis/blob/main/datasets/VCTK/hubert100/test.txt).
+Note that you can keep the key "hubert" unchanged and simply replace the unit sequences with RepCodec unit sequences.
+
+**Train**
+
+First, you need to train a F0 Quantizer Model by running
+```
+python -m torch.distributed.launch --nproc_per_node ${NUM_GPU} train_f0_vq.py \
+  --checkpoint_path checkpoints/vctk_f0_vq \
+  --config configs/VCTK/f0_vqvae.json
+```
+
+Then, you can train a vocoder by
+```
+python -m torch.distributed.launch --nproc_per_node ${NUM_GPU} train.py \
+  --checkpoint_path checkpoints/vctk_repcodec_hubert_large \
+  --config configs/VCTK/repcodec_hubert_large_l18.json 
+```
+The config file is the same as [this](https://github.com/facebookresearch/speech-resynthesis/blob/main/configs/VCTK/hubert100_lut.json)
+except we use a `num_embeddings` of 1024.
+You may want to change the directory of `input_training_file` and `input_validation_file` in the config file as well.
+And the data format is the one mentioned above.
+
+**Inference**
+
+You can run inference by
+```
+python inference.py \
+  --checkpoint_file checkpoints/vctk_repcodec_hubert_large/g_00400000 \
+  -n 5000 \
+  --vc \
+  --input_code_file datasets/VCTK/repcodec_hubert_large_l18/test.txt \
+  --output_dir generations_multispkr
+```
+The format of `input_code_file` is also the one mentioned above.
+
 ## Acknowledge
 
 Our implementation is based on [facebookresearch/AudioDec](https://github.com/facebookresearch/AudioDec).
