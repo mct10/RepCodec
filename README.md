@@ -254,9 +254,9 @@ All outputs will be saved to `exp_root/tag/`.
 
 ## Vocoder
 
-| Feature Type                                                                                                                         | Speech Data                       | Vocoder                                                                                                |
-|--------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|--------------------------------------------------------------------------------------------------------|
-| [HuBERT large](https://github.com/facebookresearch/fairseq/tree/main/examples/hubert#pre-trained-and-fine-tuned-asr-models) layer 18 | [VCTK](https://datashare.ed.ac.uk/handle/10283/3443) | [hubert_large_l18](https://drive.google.com/file/d/1jUmm50qYlzbjQYwv-DySqjBVg9ERDqta/view?usp=sharing) |
+| Feature Type                                                                                                                         | Speech Data                       | Vocoder                       | f0 quantizer                                                                                     |
+|--------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| [HuBERT large](https://github.com/facebookresearch/fairseq/tree/main/examples/hubert#pre-trained-and-fine-tuned-asr-models) layer 18 | [VCTK](https://datashare.ed.ac.uk/handle/10283/3443) | [hubert_large_l18](https://drive.google.com/file/d/1jUmm50qYlzbjQYwv-DySqjBVg9ERDqta/view?usp=sharing) | [vctk_v0_vq](https://drive.google.com/file/d/1QQh4SVKutOBaZ1gxffCWYfAgeQVxKROk/view?usp=sharing) |
 
 We train our vocoders following [facebookresearch/speech-resynthesis](https://github.com/facebookresearch/speech-resynthesis).
 Please install necessary packages and follow detailed instructions there.
@@ -288,8 +288,9 @@ python -m torch.distributed.launch --nproc_per_node ${NUM_GPU} train.py \
 ```
 The config file is the same as [this](https://github.com/facebookresearch/speech-resynthesis/blob/main/configs/VCTK/hubert100_lut.json)
 except we use a `num_embeddings` of 1024.
-You may want to change the directory of `input_training_file` and `input_validation_file` in the config file as well.
+You may want to change the paths of `input_training_file` and `input_validation_file` in the config file as well.
 And the data format is the one mentioned above.
+If you use the f0 quantizer we provide, you also need to change `f0_quantizer_path`.
 
 **Inference**
 
